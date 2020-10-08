@@ -1,23 +1,42 @@
-// developer dependencies
-const express = require("express");
-const app = express();
+const test = require("ava");
 
-const db = require('../src/server.js');
+const jsoning = require('../src/server');
+const db = new jsoning('db.json');
 
-let database = new db("/home/khalby786/Documents/jsoning/database.json");
 
-let all = database.all();
-console.log(all);
+test("Jsoning#set", async (t) => {
+    t.is(await db.set("foo", "bar"), true);
+});
 
-database.set("en", "db");
-database.set("foo", "bar");
-database.set("chro", "venter");
+test("Jsoning#push - new element", async (t) => {
+    t.is(await db.push("bar", "bar"), true);
+});
 
-app.get("/db", (req, res) => {
-  console.log(__dirname);
-  res.sendFile("/app/database.json");
-})
+test("Jsoning#all", async (t) => {
+    t.truthy(await db.all());
+});
 
-app.listen(process.env.PORT || 4000, function() {
-  console.log(`Listening carefully on port ${process.env.PORT || 4000}`);
+test("Jsoning#clear", async (t) => {
+    t.truthy(await db.clear());
+});
+
+test("Jsoning#push - already existing element", async (t) => {
+    t.is(await db.push("bar", "foo"), true);
+});
+
+test("Jsoning#get", async (t) => {
+    t.notDeepEqual(await db.get("bar"), ["bar", "foo"])
+});
+
+test("Jsoning#math", async (t) => {
+    await db.set("number", 300);
+    t.is(await db.math("number", "add", 300), true)
+});
+
+test("Jsoning#has - deliberate false", async (t) => {
+    t.is(await db.has("khaleel"), false);
+});
+
+test("Jsoning#has - existing element", async (t) => {
+    t.is(await db.has("bar"), false);
 });

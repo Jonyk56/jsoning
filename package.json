@@ -1,24 +1,45 @@
 {
   "name": "jsoning",
-  "version": "0.0.3",
-  "description": "A simple key-value JSON-based persistant lightweight database.",
-  "main": "server.js",
+  "version": "0.8.16",
+  "description": "A simple key-value JSON-based persistent lightweight database.",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node tests/test.js"
+    "start": "node src/server.js",
+    "test": "nyc ava && npm run delete",
+    "test:npm": "node tests/npmtest.js",
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "docs:build": "node docma.js && bash createcname.sh",
+    "docs:serve": "docma serve",
+    "delete": "rm src/db.json"
   },
-  "dependencies": {},
+  "dependencies": {
+    "write-file-atomic": "^3.0.3"
+  },
   "devDependencies": {
-    "express": "*"
+    "ava": "^3.8.2",
+    "clean-documentation-theme": "^0.5.2",
+    "codecov": "^3.6.5",
+    "docma": "^3.2.2",
+    "eslint": "^7.0.0",
+    "express": "*",
+    "minami": "^1.2.3",
+    "nyc": "^15.0.1"
   },
-  "engines": {
-    "node": "12.x"
-  },
-  "repository": {
-    "url": "https://glitch.com/edit/#!/hello-express"
-  },
+  "repository": "khalby786/jsoning",
+  "homepage": "https://jsoning.js.org",
   "license": "MIT",
   "keywords": [
     "json",
     "database"
+  ],
+  "author": {
+    "name": "Khaleel Gibran",
+    "url": "https://github.com/khalby786/jsoning"
+  },
+  "engines": {
+    "node": ">=0.12"
+  },
+  "files": [
+    "src"
   ]
 }
